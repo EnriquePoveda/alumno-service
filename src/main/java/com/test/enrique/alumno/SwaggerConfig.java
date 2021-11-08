@@ -31,7 +31,7 @@ public class SwaggerConfig {
                 "TEST ENRIQUE POVEDA",
                 "Test para aplicación a vacante",
                 "1.0",
-                "http://codmind.com/terms",
+                "https://google.com",
                 new Contact("Enrique Poveda", "https://google.com", "enriquepoveda19972608@gmail.com"),
                 "LICENSE",
                 "LICENSE URL",
