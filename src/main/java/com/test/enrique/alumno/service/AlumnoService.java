@@ -1,0 +1,31 @@
+package com.test.enrique.alumno.service;
+
+import com.test.enrique.alumno.entity.Alumno;
+import com.test.enrique.alumno.repository.AlumnoRepositorio;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class AlumnoService {
+
+    @Autowired
+    private AlumnoRepositorio alumnoRepositorio;
+
+    public Alumno saveAlumno(Alumno alumno) {
+        return alumnoRepositorio.save(alumno);
+    }
+
+    public Alumno findAlumnoById(Long alumnoId) {
+        return alumnoRepositorio.findAlumnoById(alumnoId);
+    }
+
+    public List<Alumno> findAll() {
+        return alumnoRepositorio.findAll();
+    }
+
+    public void delete(Alumno alumno) {
+        alumnoRepositorio.delete(alumno);
+    }
+}
