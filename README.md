@@ -2,10 +2,14 @@
 ![](https://avatars.githubusercontent.com/u/39422466?s=200&u=9ae32dc64d9ec00f3b36f0bb0412af0f61f05289&v=4)
 
 **Table of Contents**
-
-[TOCM]
-
-[TOC]
+- [Features *alumno-service*](#features-alumno-service)
+- [Dockerfile at the root of the project](#dockerfile-at-the-root-of-the-project)
+- [Docker compose file at the root of the project](#docker-compose-file-at-the-root-of-the-project)
+- [Entity](#entity)
+- [Controller](#controller)
+- [Service](#service)
+- [Deploy](#deploy)
+- [Documentation](#documentation)
 
 ### Features *alumno-service*
 - Developed in Java with Spring Boot
@@ -20,7 +24,7 @@
 	COPY ${JAR_FILE} alumno-service-0.0.1-SNAPSHOT.jar
 	ENTRYPOINT ["java","-jar","/alumno-service-0.0.1-SNAPSHOT.jar"]
 
-### docker-compose.yml at the root of the project
+### Docker compose file at the root of the project
 	version: '2'
 
 	services:
@@ -48,96 +52,99 @@
 		  - POSTGRES_PASSWORD=compose-postgres
 
 ### Entity
-    @Entity
-    @AllArgsConstructor
-    @NoArgsConstructor
-    @Table(name = "alumno")
-	public class Alumno {
-		@Id
-		@GeneratedValue(strategy = GenerationType.AUTO)
-		private Long id;
-		@Column(name = "cedula")
-		private String alumnoCedula;
-		@Column(name = "nombre")
-		private String alumnoNombre;
-		@Column(name = "apellido")
-		private String alumnoApellido;
-		@Column(name = "grado")
-		private String alumnoGrado;
-		@Column(name = "fecha_nacimiento")
-		@Temporal(TemporalType.TIMESTAMP)
-		private Date alumnoFecNaci;
-		@Column(name = "fecha_registro")
-		@Temporal(TemporalType.TIMESTAMP)
-		private Date alumnoFecReg;
-	}
-
+```csharp
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "alumno")
+public class Alumno {
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+	@Column(name = "cedula")
+	private String alumnoCedula;
+	@Column(name = "nombre")
+	private String alumnoNombre;
+	@Column(name = "apellido")
+	private String alumnoApellido;
+	@Column(name = "grado")
+	private String alumnoGrado;
+	@Column(name = "fecha_nacimiento")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date alumnoFecNaci;
+	@Column(name = "fecha_registro")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date alumnoFecReg;
+}
+```
 ### Controller
-	@RestController
-	@RequestMapping("/alumnos")
-	public class AlumnoController {
-		@Autowired
-		private AlumnoService alumnoService;
+```csharp
+@RestController
+@RequestMapping("/alumnos")
+public class AlumnoController {
+	@Autowired
+	private AlumnoService alumnoService;
 
-		@PostMapping("/")
-		public Alumno saveAlumno(@RequestBody Alumno alumno) {
-			return alumnoService.saveAlumno(alumno);
-		}
+	@PostMapping("/")
+	public Alumno saveAlumno(@RequestBody Alumno alumno) {
+		return alumnoService.saveAlumno(alumno);
+	}
 
-		@GetMapping("/{id}")
-		public Alumno findById(@PathVariable("id") Long alumnoId) {
-			return alumnoService.findAlumnoById(alumnoId);
-		}
+	@GetMapping("/{id}")
+	public Alumno findById(@PathVariable("id") Long alumnoId) {
+		return alumnoService.findAlumnoById(alumnoId);
+	}
 
-		@GetMapping("/")
-		public List<Alumno> findAll() {
-			return alumnoService.findAll();
-		}
+	@GetMapping("/")
+	public List<Alumno> findAll() {
+		return alumnoService.findAll();
+	}
 
-		@DeleteMapping("/")
-		public void deleteAlumno(@RequestBody Alumno alumno) {
-			Alumno temp = alumnoService.findAlumnoById(alumno.getId());
-			if (null != temp && temp.getId() != null) {
-				alumnoService.delete(temp);
-			}
-		}
-
-		@GetMapping("/export/excel")
-		public void exportToExcel(HttpServletResponse response) throws IOException {
-			response.setContentType("application/octet-stream");
-			String headerKey = "Content-Disposition";
-			String headervalue = "attachment; filename=alumnos_info.xlsx";
-			response.setHeader(headerKey, headervalue);
-			List<Alumno> listAlumnos = alumnoService.findAll();
-			AlumnoExcelExporter exp = new AlumnoExcelExporter(listAlumnos);
-			exp.export(response);
+	@DeleteMapping("/")
+	public void deleteAlumno(@RequestBody Alumno alumno) {
+		Alumno temp = alumnoService.findAlumnoById(alumno.getId());
+		if (null != temp && temp.getId() != null) {
+			alumnoService.delete(temp);
 		}
 	}
 
+	@GetMapping("/export/excel")
+	public void exportToExcel(HttpServletResponse response) throws IOException {
+		response.setContentType("application/octet-stream");
+		String headerKey = "Content-Disposition";
+		String headervalue = "attachment; filename=alumnos_info.xlsx";
+		response.setHeader(headerKey, headervalue);
+		List<Alumno> listAlumnos = alumnoService.findAll();
+		AlumnoExcelExporter exp = new AlumnoExcelExporter(listAlumnos);
+		exp.export(response);
+	}
+}
+```
 ### Service
-	@Service
-	public class AlumnoService {
+```csharp
+@Service
+public class AlumnoService {
 
-		@Autowired
-		private AlumnoRepositorio alumnoRepositorio;
+	@Autowired
+	private AlumnoRepositorio alumnoRepositorio;
 
-		public Alumno saveAlumno(Alumno alumno) {
-			return alumnoRepositorio.save(alumno);
-		}
-
-		public Alumno findAlumnoById(Long alumnoId) {
-			return alumnoRepositorio.findAlumnoById(alumnoId);
-		}
-
-		public List<Alumno> findAll() {
-			return alumnoRepositorio.findAll();
-		}
-
-		public void delete(Alumno alumno) {
-			alumnoRepositorio.delete(alumno);
-		}
+	public Alumno saveAlumno(Alumno alumno) {
+		return alumnoRepositorio.save(alumno);
 	}
 
+	public Alumno findAlumnoById(Long alumnoId) {
+		return alumnoRepositorio.findAlumnoById(alumnoId);
+	}
+
+	public List<Alumno> findAll() {
+		return alumnoRepositorio.findAll();
+	}
+
+	public void delete(Alumno alumno) {
+		alumnoRepositorio.delete(alumno);
+	}
+}
+```
 ### Deploy
 - You must have  [Docker](https://www.docker.com/products/docker-desktop) installed.
 - Run  command (**docker login**), not necessarily, in my case when using the latest version of docker it threw an error when pulling images but when logging in I solved it.
