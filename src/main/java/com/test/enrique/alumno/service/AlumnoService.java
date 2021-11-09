@@ -20,10 +20,6 @@ public class AlumnoService {
     public Alumno editAlumno(Alumno alumno) {
         Alumno temp = alumnoRepositorio.findAlumnoById(alumno.getId());
         if (temp != null && temp.getId() != null) {
-            temp.setAlumnoNombre(alumno.getAlumnoNombre());
-            temp.setAlumnoApellido(alumno.getAlumnoApellido());
-            temp.setAlumnoGrado(alumno.getAlumnoGrado());
-            temp.setAlumnoFecNaci(alumno.getAlumnoFecNaci());
             return saveAlumno(alumno);
         }
         return null;
