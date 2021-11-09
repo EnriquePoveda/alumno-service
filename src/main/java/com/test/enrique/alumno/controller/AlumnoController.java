@@ -25,6 +25,11 @@ public class AlumnoController {
         return alumnoService.saveAlumno(alumno);
     }
 
+    @PostMapping("/edit")
+    public Alumno editAlumno(@RequestBody Alumno alumno) {
+        return alumnoService.editAlumno(alumno);
+    }
+
     @GetMapping("/{id}")
     public Alumno findById(@PathVariable("id") Long alumnoId) {
         return alumnoService.findAlumnoById(alumnoId);
