@@ -89,6 +89,11 @@ public class AlumnoController {
 	public Alumno saveAlumno(@RequestBody Alumno alumno) {
 		return alumnoService.saveAlumno(alumno);
 	}
+	
+	@PostMapping("/edit")
+    	public Alumno editAlumno(@RequestBody Alumno alumno) {
+        	return alumnoService.editAlumno(alumno);
+    	}
 
 	@GetMapping("/{id}")
 	public Alumno findById(@PathVariable("id") Long alumnoId) {
@@ -131,6 +136,18 @@ public class AlumnoService {
 	public Alumno saveAlumno(Alumno alumno) {
 		return alumnoRepositorio.save(alumno);
 	}
+	
+	public Alumno editAlumno(Alumno alumno) {
+		Alumno temp = alumnoRepositorio.findAlumnoById(alumno.getId());
+		if (temp != null && temp.getId() != null) {
+		    temp.setAlumnoNombre(alumno.getAlumnoNombre());
+		    temp.setAlumnoApellido(alumno.getAlumnoApellido());
+		    temp.setAlumnoGrado(alumno.getAlumnoGrado());
+		    temp.setAlumnoFecNaci(alumno.getAlumnoFecNaci());
+		    return saveAlumno(alumno);
+		}
+		return null;
+    	}
 
 	public Alumno findAlumnoById(Long alumnoId) {
 		return alumnoRepositorio.findAlumnoById(alumnoId);
